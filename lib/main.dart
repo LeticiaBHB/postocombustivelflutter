@@ -52,11 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_basket),
-            label: "Conveniência",
+            label: "Comparação",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet_outlined),
-            label: "Calculo",
+            label: "Serviços",
           ),
         ],
       ),
