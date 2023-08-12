@@ -20,7 +20,8 @@ class _ConvenienciaScreenState extends State<ConvenienciaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
         children: [
           Container(
             child: Column(
@@ -158,6 +159,8 @@ class _ConvenienciaScreenState extends State<ConvenienciaScreen> {
           )
         ],
       ),
+      ),
     );
   }
 }
+
