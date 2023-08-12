@@ -1,89 +1,116 @@
 import 'package:flutter/material.dart';
-import 'calculo.dart';
-import 'conveniência.dart';
 
-
-void main() {
-  runApp(MyApp());
+class CalculoScreen extends StatefulWidget {
+  @override
+  _CalculoScreenState createState() => _CalculoScreenState();
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: '/home', // Rota inicial
-      routes: {
-        '/home': (context) => HomeScreen(),
-        '/calculo': (context) => CalculoScreen(),
-        '/conveniencia': (context) => ConvenienciaScreen(),
-      },
-    );
+class _CalculoScreenState extends State<CalculoScreen> {
+  TextEditingController _controllerAlcool = TextEditingController();
+  TextEditingController _controllerGasolina = TextEditingController();
+  String _textoResultado = '';
+
+  void _calcular() {
+    double? precoAlcool = double.tryParse(_controllerAlcool.text);
+    double? precoGasolina = double.tryParse(_controllerGasolina.text);
+    if (precoAlcool == null || precoGasolina == null) {
+      setState(() {
+        _textoResultado = 'Número Inválido';
+      });
+    } else {
+      if ((precoAlcool / precoGasolina) >= 0.7) {
+        setState(() {
+          _textoResultado = 'melhor abastecer com gasolina';
+        });
+      } else {
+        setState(() {
+          _textoResultado = 'melhor abastecer com Álcool';
+        });
+      }
+      _limparCampos();
+    }
   }
-}
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _indiceAtual = 0;
-  final List<Widget> _telas = [
-    NewPageScreen(
-      Image.asset('logo.jpeg', width: 500, height: 500,),
-    ),
-    CalculoScreen(),
-    ConvenienciaScreen(),
-  ];
+  void _limparCampos() {
+    _controllerGasolina.text = '';
+    _controllerAlcool.text = '';
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Posto de Combustíveis'),
-      ),
-      body: _telas[_indiceAtual],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _indiceAtual,
-        onTap: onTabTapped,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_business_rounded),
-            label: "Home",
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            width: MediaQuery.of(context).size.width * 0.8,
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              "Cálculo Vale-a-Pena",
+              style: TextStyle(fontSize: 24, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_basket),
-            label: "Comparação",
+          Padding(
+            padding: EdgeInsets.only(bottom: 20),
+            child: Image.asset('assets/posto.jpeg', width: MediaQuery.of(context).size.width * 0.8),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet_outlined),
-            label: "Serviços",
+          Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: Text(
+              'saiba qual a melhor opção para abastecimento',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ), textAlign: TextAlign.center,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 50),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Preço Alcool, ex: 4.67'),
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  controller: _controllerAlcool,
+                ),
+                SizedBox(height: 10),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Preço Gasolina, ex: 5.89'),
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                  controller: _controllerGasolina,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            child: Text('Calcular'),
+            onPressed: () {
+              _calcular();
+            },
+          ),
+          SizedBox(height: 20),
+          Text(
+            '$_textoResultado ',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ],
       ),
     );
   }
-
-  void onTabTapped(int index) {
-    setState(() {
-      _indiceAtual = index;
-    });
-  }
 }
 
-class NewPageScreen extends StatelessWidget {
-  final Widget conteudo;
-
-  NewPageScreen(this.conteudo);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: conteudo,
-      ),
-    );
-  }
+void main() {
+  runApp(MaterialApp(
+    home: CalculoScreen(),
+  ));
 }
