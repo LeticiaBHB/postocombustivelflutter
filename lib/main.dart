@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'calculo.dart';
 import 'conveniência.dart';
 
+
 void main() {
   runApp(MyApp());
 }
@@ -21,16 +22,18 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int _indiceAtual = 0;
   final List<Widget> _telas = [
-    NewPageScreen("Página principal"),
+    NewPageScreen(
+      Image.asset('logo.jpeg', width: 500, height: 500,),
+    ),
     CalculoScreen(),
     ConvenienciaScreen(),
   ];
@@ -71,15 +74,15 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class NewPageScreen extends StatelessWidget {
-  final String texto;
+  final Widget conteudo;
 
-  NewPageScreen(this.texto);
+  NewPageScreen(this.conteudo);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Text(texto),
+        child: conteudo,
       ),
     );
   }
